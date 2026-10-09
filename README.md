@@ -103,6 +103,36 @@ On Windows:
 
 The Gradle commands require a configured Android SDK and a project containing the corresponding wrapper scripts.
 
+### Download from GitHub Actions
+
+Every push to `main` and every pull request builds the APK. Open the repository's Actions tab, pick the run, and download the `home-up-probe-apk` artifact (a zip containing the APK).
+
+Pushing a tag such as `v0.3` also attaches the APK to a GitHub Release for that tag (marked as a prerelease).
+
+The workflow is `.github/workflows/build-apk.yml` and can also be run manually (`workflow_dispatch`).
+
+### Optional: stable signing key
+
+A fixed signing key lets each new build install over the previous one as an update. Generate a keystore and store it as repository secrets:
+
+```bash
+keytool -genkeypair -v -keystore release.jks -alias homeup -keyalg RSA -keysize 2048 -validity 10000
+base64 -w0 release.jks | gh secret set SIGNING_KEYSTORE_BASE64
+gh secret set SIGNING_STORE_PASSWORD
+gh secret set SIGNING_KEY_ALIAS   # value: homeup
+gh secret set SIGNING_KEY_PASSWORD
+```
+
+All four secrets must be set. Local builds can use the same variables, with `SIGNING_KEYSTORE_PATH` pointing at the `.jks` file instead of the base64 secret: `SIGNING_KEYSTORE_PATH`, `SIGNING_STORE_PASSWORD`, `SIGNING_KEY_ALIAS`, `SIGNING_KEY_PASSWORD`.
+
+### Without secrets, or if the key is lost
+
+Builds still succeed but are signed with the debug key, which is generated per runner and can change between runs. The run shows a warning.
+
+Installing over a build signed with a different key fails. Uninstalling to fix that deletes the app's saved grid backup, so restore the original grid first (see [Restoring the original grid](#restoring-the-original-grid)).
+
+Back up `release.jks` somewhere safe and never commit it (`*.jks`, `*.keystore`, and `*.apk` are gitignored).
+
 ## Installing with ADB
 
 Enable Developer options and USB or wireless debugging on your Samsung device.
