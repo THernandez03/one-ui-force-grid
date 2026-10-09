@@ -1,18 +1,11 @@
-# Home Up Probe
+# Home Up Probe v2 - read-only grid test
 
-A minimal **read-only** Android app. It does not modify One UI Home, Home Up settings, or the grid.
+Open this folder in Android Studio and build an APK with Build APK(s), or run `gradlew.bat assembleDebug` if a Gradle wrapper is available.
 
-- Requests Home Up's `HOMESTAR_DATA` normal permission.
-- Checks whether Android granted the permission.
-- Calls `content://com.samsung.android.app.homestar.provider` with `version_info`.
-- Displays the returned bundle or exception.
+Install the debug APK using `adb install -r app/build/outputs/apk/debug/app-debug.apk`.
 
-## Build
+Open **Home Up Probe** and tap **Read current grid**. Copy the full diagnostic text.
 
-Open the folder in Android Studio with Android SDK 35 and JDK 17; build the debug APK. Alternatively use Gradle 8.9+ and Android SDK 35, and run `gradle assembleDebug` from this folder.
+This app requests Samsung's normal HOMESTAR_DATA permission and attempts to instantiate the `HomeGrid` class from the *installed* Home Up package via `createPackageContext`. It does not package or modify One UI Home, and performs only a `bulk_load` read.
 
-The output is `app/build/outputs/apk/debug/app-debug.apk`.
-
-Install with `adb install -r app-debug.apk`, open **Home Up Probe**, and tap **Test permission and provider**.
-
-This is a diagnostic only: there is no grid read/write yet. A successful `version_info` call does not imply 5x8 support.
+**Experimental:** Android class-loading rules or Samsung's dependencies may prevent this approach. If it fails, report the exact error. Do not grant additional permissions or alter launcher data.
