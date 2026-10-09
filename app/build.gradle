@@ -1,0 +1,12 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.example.homeupprobe'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.example.homeupprobe'
+        minSdk 29
+        targetSdk 28
+        versionCode 1
+        versionName '0.1'
+    }
+}
