@@ -6,7 +6,7 @@ android {
         applicationId 'com.example.homeupprobe'
         minSdk 29
         targetSdk 28
-        versionCode 1
-        versionName '0.1'
+        versionCode 3
+        versionName '0.3'
     }
 }
